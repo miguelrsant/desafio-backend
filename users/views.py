@@ -17,7 +17,10 @@ class UserCreateView(APIView):
         if not serializer.is_valid():
 
             return Response(
-                serializer.errors,
+                {
+                    "message": "Validation failed.",
+                    "errors": serializer.errors,
+                },
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -26,7 +29,13 @@ class UserCreateView(APIView):
             password=serializer.validated_data["password"],
         )
 
-        return Response(result, status=status.HTTP_201_CREATED)
+        return Response(
+            {
+                "message": "User created successfully.",
+                "data": result,
+            },
+            status=status.HTTP_201_CREATED,
+        )
 
 
 class UserLoginView(APIView):
@@ -39,7 +48,10 @@ class UserLoginView(APIView):
         if not serializer.is_valid():
 
             return Response(
-                serializer.errors,
+                {
+                    "message": "Validation failed.",
+                    "errors": serializer.errors,
+                },
                 status=status.HTTP_400_BAD_REQUEST,
             )
         result = UserService.login_user(
@@ -49,7 +61,15 @@ class UserLoginView(APIView):
 
         if result is None:
             return Response(
-                {"message": "Usuário ou senha inválidos."},
+                {
+                    "message": "Invalid username or password.",
+                },
                 status=status.HTTP_401_UNAUTHORIZED,
             )
-        return Response(result, status=status.HTTP_200_OK)
+        return Response(
+            {
+                "message": "Login successful.",
+                "data": result,
+            },
+            status=status.HTTP_200_OK,
+        )
