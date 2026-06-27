@@ -1,3 +1,54 @@
-from django.shortcuts import render
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-# Create your views here.
+from .serializers import CreateUserSerializer, LoginUserSerializer
+from .services import UserService
+
+
+class UserCreateView(APIView):
+
+    def post(self, request):
+
+        serializer = CreateUserSerializer(data=request.data)
+
+        if not serializer.is_valid():
+
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        result = UserService.create_user(
+            username=serializer.validated_data["username"],
+            password=serializer.validated_data["password"],
+        )
+
+        return Response(result, status=status.HTTP_201_CREATED)
+
+
+class UserLoginView(APIView):
+
+    def post(self, request):
+
+        serializer = LoginUserSerializer(data=request.data)
+
+        if not serializer.is_valid():
+
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        result = UserService.login_user(
+            username=serializer.validated_data["username"],
+            password=serializer.validated_data["password"],
+        )
+
+        if result is None:
+            return Response(
+                {
+                    "message": "Usuário ou senha inválidos."
+                },
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+        return Response(result, status=status.HTTP_200_OK)

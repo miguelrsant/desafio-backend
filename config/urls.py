@@ -33,5 +33,5 @@ urlpatterns = [
     path("", home),
     path("admin/", admin.site.urls),
     path("api/", include("tasks.urls")),
-    path("user/", include("users.urls")),
+    path("users/", include("users.urls")),
 ]
