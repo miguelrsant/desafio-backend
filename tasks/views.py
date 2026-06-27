@@ -4,6 +4,7 @@ import django.utils.timezone as timezone
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from .filters import filter_tasks
 
 
 class TaskView(APIView):
@@ -12,28 +13,12 @@ class TaskView(APIView):
 
     def get(self, request):
 
-        user = request.user
-        status = request.query_params.get("status")
+        tasks = Task.objects.filter(
+            user=request.user,
+            deleted_at__isnull=True
+        )
 
-        if status and status not in Task.Status.values:
-            return Response(
-                {
-                    "message": "Status inválido"
-                },
-                status=400
-            )
-
-        if status:
-            tasks = Task.objects.filter(
-                user=user,
-                deleted_at__isnull=True,
-                status=status
-            )
-        else:
-            tasks = Task.objects.filter(
-                user=user,
-                deleted_at__isnull=True
-            )
+        tasks = filter_tasks(tasks, request)
 
         if not tasks.exists():
             return Response(
@@ -62,19 +47,25 @@ class TaskView(APIView):
 
 
 class TaskDetailView(APIView):
-
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, id):
-
+    def _get_task(self, request, id):
         try:
             task = Task.objects.get(
                 id=id,
                 user=request.user,
                 deleted_at__isnull=True
             )
+            return task
 
         except Task.DoesNotExist:
+            return None
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, id):
+
+        task = self._get_task(request, id)
+
+        if task is None:
             return Response(
                 {
                     "message": "Tarefa não encontrada."
@@ -88,14 +79,9 @@ class TaskDetailView(APIView):
 
     def patch(self, request, id):
 
-        try:
-            task = Task.objects.get(
-                id=id,
-                user=request.user,
-                deleted_at__isnull=True
-            )
+        task = self._get_task(request, id)
 
-        except Task.DoesNotExist:
+        if task is None:
             return Response(
                 {
                     "message": "Tarefa não encontrada."
@@ -117,14 +103,9 @@ class TaskDetailView(APIView):
 
     def delete(self, request, id):
 
-        try:
-            task = Task.objects.get(
-                id=id,
-                user=request.user,
-                deleted_at__isnull=True
-            )
+        task = self._get_task(request, id)
 
-        except Task.DoesNotExist:
+        if task is None:
             return Response(
                 {
                     "message": "Tarefa não encontrada."
