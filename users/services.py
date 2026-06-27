@@ -26,16 +26,13 @@ class UserService:
             "user": {
                 "id": user.id,
                 "username": user.username,
-            }
+            },
         }
 
     @staticmethod
     def login_user(username: str, password: str):
 
-        user = authenticate(
-            username=username,
-            password=password
-        )
+        user = authenticate(username=username, password=password)
 
         if user is None:
             return None

@@ -13,24 +13,14 @@ class TaskView(APIView):
 
     def get(self, request):
 
-        tasks = Task.objects.filter(
-            user=request.user,
-            deleted_at__isnull=True
-        )
+        tasks = Task.objects.filter(user=request.user, deleted_at__isnull=True)
 
         tasks = filter_tasks(tasks, request)
 
         if not tasks.exists():
-            return Response(
-                {
-                    "message": "Nenhuma tarefa encontrada."
-                },
-                status=404
-            )
+            return Response({"message": "Nenhuma tarefa encontrada."}, status=404)
 
-        return Response(
-            TaskSerializer(tasks, many=True).data
-        )
+        return Response(TaskSerializer(tasks, many=True).data)
 
     def post(self, request):
 
@@ -40,20 +30,13 @@ class TaskView(APIView):
 
         task = serializer.save(user=request.user)
 
-        return Response(
-            TaskSerializer(task).data,
-            status=201
-        )
+        return Response(TaskSerializer(task).data, status=201)
 
 
 class TaskDetailView(APIView):
     def _get_task(self, request, id):
         try:
-            task = Task.objects.get(
-                id=id,
-                user=request.user,
-                deleted_at__isnull=True
-            )
+            task = Task.objects.get(id=id, user=request.user, deleted_at__isnull=True)
             return task
 
         except Task.DoesNotExist:
@@ -66,12 +49,7 @@ class TaskDetailView(APIView):
         task = self._get_task(request, id)
 
         if task is None:
-            return Response(
-                {
-                    "message": "Tarefa não encontrada."
-                },
-                status=404
-            )
+            return Response({"message": "Tarefa não encontrada."}, status=404)
 
         serializer = TaskSerializer(task)
 
@@ -82,18 +60,9 @@ class TaskDetailView(APIView):
         task = self._get_task(request, id)
 
         if task is None:
-            return Response(
-                {
-                    "message": "Tarefa não encontrada."
-                },
-                status=404
-            )
+            return Response({"message": "Tarefa não encontrada."}, status=404)
 
-        serializer = TaskSerializer(
-            task,
-            data=request.data,
-            partial=True
-        )
+        serializer = TaskSerializer(task, data=request.data, partial=True)
 
         serializer.is_valid(raise_exception=True)
 
@@ -106,19 +75,9 @@ class TaskDetailView(APIView):
         task = self._get_task(request, id)
 
         if task is None:
-            return Response(
-                {
-                    "message": "Tarefa não encontrada."
-                },
-                status=404
-            )
+            return Response({"message": "Tarefa não encontrada."}, status=404)
 
         task.deleted_at = timezone.now()
         task.save()
 
-        return Response(
-            {
-                "message": "Tarefa removida com sucesso."
-            },
-            status=200
-        )
+        return Response({"message": "Tarefa removida com sucesso."}, status=200)

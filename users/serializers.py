@@ -20,9 +20,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
     def validate_username(self, value):
 
         if User.objects.filter(username=value).exists():
-            raise serializers.ValidationError(
-                "Usuário já cadastrado."
-            )
+            raise serializers.ValidationError("Usuário já cadastrado.")
 
         return value
 
@@ -30,6 +28,4 @@ class CreateUserSerializer(serializers.ModelSerializer):
 class LoginUserSerializer(serializers.Serializer):
 
     username = serializers.CharField()
-    password = serializers.CharField(
-        write_only=True
-    )
+    password = serializers.CharField(write_only=True)

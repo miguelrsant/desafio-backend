@@ -49,9 +49,7 @@ class UserLoginView(APIView):
 
         if result is None:
             return Response(
-                {
-                    "message": "Usuário ou senha inválidos."
-                },
+                {"message": "Usuário ou senha inválidos."},
                 status=status.HTTP_401_UNAUTHORIZED,
             )
         return Response(result, status=status.HTTP_200_OK)

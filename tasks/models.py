@@ -14,7 +14,7 @@ class Task(models.Model):
         on_delete=models.CASCADE,
         related_name="tasks",
         null=True,
-        blank=True
+        blank=True,
     )
 
     title = models.CharField(max_length=255)
