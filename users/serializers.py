@@ -17,13 +17,6 @@ class CreateUserSerializer(serializers.ModelSerializer):
             "password",
         ]
 
-    def validate_username(self, value):
-
-        if User.objects.filter(username=value).exists():
-            raise serializers.ValidationError("Usuário já cadastrado.")
-
-        return value
-
 
 class LoginUserSerializer(serializers.Serializer):
 
