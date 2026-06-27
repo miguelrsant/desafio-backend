@@ -13,11 +13,27 @@ class TaskView(APIView):
     def get(self, request):
 
         user = request.user
+        status = request.query_params.get("status")
 
-        tasks = Task.objects.filter(
-            user=user,
-            deleted_at__isnull=True
-        )
+        if status and status not in Task.Status.values:
+            return Response(
+                {
+                    "message": "Status inválido"
+                },
+                status=400
+            )
+
+        if status:
+            tasks = Task.objects.filter(
+                user=user,
+                deleted_at__isnull=True,
+                status=status
+            )
+        else:
+            tasks = Task.objects.filter(
+                user=user,
+                deleted_at__isnull=True
+            )
 
         if not tasks.exists():
             return Response(
