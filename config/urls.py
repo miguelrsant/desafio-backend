@@ -16,9 +16,22 @@ Including another URLconf
 """
 
 from django.contrib import admin
+from django.http import JsonResponse
 from django.urls import include, path
 
+
+def home(request):
+    return JsonResponse(
+        {
+            "message": "Task Manager API",
+            "version": "1.0.0",
+        }
+    )
+
+
 urlpatterns = [
+    path("", home),
     path("admin/", admin.site.urls),
     path("api/", include("tasks.urls")),
+    path("user/", include("users.urls")),
 ]
