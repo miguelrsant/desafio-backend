@@ -9,6 +9,14 @@ class Task(models.Model):
         IN_PROGRESS = "IN_PROGRESS", "Em andamento"
         COMPLETED = "COMPLETED", "Concluída"
 
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="tasks",
+        null=True,
+        blank=True
+    )
+
     title = models.CharField(max_length=255)
 
     description = models.TextField()
