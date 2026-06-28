@@ -1,18 +1,31 @@
 <!doctype html>
-
-<html>
+<html lang="pt-br">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/static/css/main.css" />
     <title>Cadastro</title>
+    <style>
+      body {
+        height: 100vh;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
   </head>
-
   <body>
-    <h1>Criar conta</h1>
+    <div class="card_login">
+      <h1>Cadastro</h1>
+      <p>Faça seu cadastro para continuar</p>
+      <input id="username" placeholder="username" />
 
-    <input id="username" placeholder="Usuário" />
+      <input id="password" type="password" placeholder="password" />
 
-    <input id="password" type="password" placeholder="Senha" />
-
-    <button onclick="register()">Cadastrar</button>
+      <button onclick="register()">Cadastrar</button>
+      <a href="/"> Já tem uma conta? </a>
+    </div>
 
     <script src="/static/app.js"></script>
   </body>
