@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/static/css/main.css" />
+    <title>Task Manager</title>
+    <style>
+      body {
+        height: 100vh;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="logo">Task Manager</div>
+
+      <div class="nav_links">
+        <a href="/login" class="links">Login</a>
+        <a href="/register" class="btn_nav"> Criar conta </a>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div class="hero_content">
+        <h1>
+          Organize suas tarefas.
+          <br />
+          Alcance seus objetivos.
+        </h1>
+
+        <p>
+          Tenha controle das suas atividades em um único lugar. Crie, acompanhe
+          e gerencie suas tarefas de forma simples e eficiente.
+        </p>
+
+        <div class="hero_buttons">
+          <a href="/register" class="btn_primary"> Começar agora </a>
+
+          <a href="/login" class="btn_secondary"> Entrar </a>
+        </div>
+      </div>
+    </section>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
+

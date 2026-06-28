@@ -1,4 +1,6 @@
-@import "partials/login";
+@import "partials/access";
+@import "partials/home";
+@import "partials/dashboard";
 
 *,
 *::before,
@@ -10,5 +12,5 @@
 }
 
 body {
-  background-color: #0f0f0f;
+  background-color: #F8FAFC;
 }
