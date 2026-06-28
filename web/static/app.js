@@ -1,5 +1,7 @@
 const API = "";
 
+let taskEditando = null;
+
 function getToken() {
   return localStorage.getItem("token");
 }
@@ -28,8 +30,6 @@ async function register() {
     localStorage.setItem("token", data.data.access);
 
     window.location = "/dashboard";
-  } else {
-    alert("Erro ao cadastrar");
   }
 }
 
@@ -54,18 +54,14 @@ async function login() {
   const data = await response.json();
 
   if (response.ok) {
-    console.log(data);
-
     localStorage.setItem("token", data.data.access);
 
     window.location = "/dashboard";
-  } else {
-    alert("Login inválido");
   }
 }
 
-async function loadTasks() {
-  const response = await fetch(API + "/tasks/", {
+async function loadTasks(url = "/tasks/") {
+  const response = await fetch(API + url, {
     headers: {
       Authorization: "Bearer " + getToken(),
     },
@@ -79,21 +75,35 @@ async function loadTasks() {
 
   list.innerHTML = "";
 
+  const Status = {
+    COMPLETED: "Completo",
+    PENDING: "Pendente",
+    IN_PROGRESS: "Em progresso",
+  };
+
   tasks.forEach((task) => {
     list.innerHTML += `
-        <li>
-            <strong>${task.title}</strong>
-            -
-            ${task.description}
-            -
-            ${task.status}
-        </li>
+      <li>
+        <div class="tarefas">
+          <h1>${task.title}</h1>
+
+          <p>${task.description}</p>
+
+          <p>${Status[task.status]}</p>
+
+          <div class="btns_tasks">
+            <button onclick="alterarTask(${task.id})">Alterar</button>
+            <button onclick="excluirTask(${task.id})">Excluir</button>
+          </div>
+        </div>
+      </li>
         `;
   });
 }
 
 async function createTask() {
   const title = document.getElementById("title").value;
+
   const description = document.getElementById("description").value;
 
   await fetch(API + "/tasks/", {
@@ -106,11 +116,95 @@ async function createTask() {
     },
 
     body: JSON.stringify({
-      title: title,
+      title,
 
-      description: description,
+      description,
+
+      status: "PENDING",
     }),
   });
+
+  document.getElementById("title").value = "";
+
+  document.getElementById("description").value = "";
+
+  loadTasks();
+}
+
+async function alterarTask(id) {
+  taskEditando = id;
+
+  const response = await fetch(API + `/tasks/${id}/`, {
+    headers: {
+      Authorization: "Bearer " + getToken(),
+    },
+  });
+
+  const result = await response.json();
+
+  console.log(result);
+
+  const task = result.data ?? result;
+
+  document.getElementById("editTitle").value = task.title;
+
+  document.getElementById("editDescription").value = task.description;
+
+  document.getElementById("editStatus").value = task.status;
+
+  document.getElementById("editModal").style.display = "block";
+}
+
+async function saveEdit() {
+  const title = document.getElementById("editTitle").value;
+
+  const description = document.getElementById("editDescription").value;
+
+  const status = document.getElementById("editStatus").value;
+
+  await fetch(
+    API + `/tasks/${taskEditando}/`,
+
+    {
+      method: "PATCH",
+
+      headers: {
+        "Content-Type": "application/json",
+
+        Authorization: "Bearer " + getToken(),
+      },
+
+      body: JSON.stringify({
+        title: title,
+
+        description: description,
+
+        status: status,
+      }),
+    },
+  );
+
+  closeModal();
+
+  loadTasks();
+}
+
+function closeModal() {
+  document.getElementById("editModal").style.display = "none";
+}
+
+async function excluirTask(id) {
+  await fetch(
+    API + `/tasks/${id}/`,
+
+    {
+      method: "DELETE",
+
+      headers: {
+        Authorization: "Bearer " + getToken(),
+      },
+    },
+  );
 
   loadTasks();
 }
@@ -119,4 +213,29 @@ function logout() {
   localStorage.removeItem("token");
 
   window.location = "/";
+}
+function filterTasks() {
+  const title = document.getElementById("filterTitle").value;
+
+  const status = document.getElementById("filterStatus").value;
+
+  let url = "/tasks/?";
+
+  if (title) {
+    url += `title=${title}&`;
+  }
+
+  if (status) {
+    url += `status=${status}`;
+  }
+
+  loadTasks(url);
+}
+
+function clearFilters() {
+  document.getElementById("filterTitle").value = "";
+
+  document.getElementById("filterStatus").value = "";
+
+  loadTasks();
 }

@@ -13,11 +13,46 @@
     <input id="description" placeholder="Descrição da tarefa" />
 
     <button onclick="createTask()">Criar</button>
+    <button onclick="logout()">Sair</button>
+    <div class="filtros">
+      <input id="filterTitle" type="text" placeholder="Filtrar por título" />
+
+      <select id="filterStatus">
+        <option value="">Todos os status</option>
+
+        <option value="PENDING">Pendente</option>
+        <option value="IN_PROGRESS">Em progresso</option>
+        <option value="COMPLETED">Completo</option>
+      </select>
+
+      <button onclick="filterTasks()">Filtrar</button>
+      <button onclick="clearFilters()">Limpar</button>
+    </div>
 
     <ul id="tasks"></ul>
 
-    <button onclick="logout()">Sair</button>
 
+    <div id="editModal" class="modal">
+      <div class="modal-content">
+        <h2>Alterar tarefa</h2>
+
+        <input id="editTitle" type="text" placeholder="Título" />
+
+        <textarea id="editDescription" placeholder="Descrição"> </textarea>
+
+        <select id="editStatus">
+          <option value="PENDING">Pendente</option>
+          <option value="IN_PROGRESS">Em progresso</option>
+          <option value="COMPLETED">Completo</option>
+        </select>
+
+        <div>
+          <button onclick="saveEdit()">Salvar</button>
+
+          <button onclick="closeModal()">Cancelar</button>
+        </div>
+      </div>
+    </div>
     <script src="/static/app.js"></script>
 
     <script>
