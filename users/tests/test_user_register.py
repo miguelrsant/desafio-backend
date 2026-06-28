@@ -15,6 +15,7 @@ def test_create_user():
     )
 
     assert response.status_code == 201
+    assert response.data["message"] == "User created successfully."
     assert User.objects.filter(username="testuser").exists()
 
 
@@ -32,6 +33,7 @@ def test_register_user_duplicate_username():
     )
 
     assert response.status_code == 400
+    assert response.data["message"] == "Validation failed."
 
 
 @pytest.mark.django_db
@@ -42,6 +44,7 @@ def test_register_user_without_username():
     response = client.post("/users/register", {"password": "12345678"}, format="json")
 
     assert response.status_code == 400
+    assert response.data["message"] == "Validation failed."
     assert User.objects.count() == 0
 
 
@@ -59,6 +62,7 @@ def test_register_user_without_password():
     )
 
     assert response.status_code == 400
+    assert response.data["message"] == "Validation failed."
     assert User.objects.count() == 0
 
 
@@ -73,6 +77,7 @@ def test_register_returns():
         format="json",
     )
     assert response.status_code == 201
+    assert response.data["message"] == "User created successfully."
     assert response.data["data"]["user"]["username"] == "testuser"
 
 
@@ -90,6 +95,7 @@ def test_register_password_is_hashed():
     user = User.objects.get(username="testuser")
 
     assert response.status_code == 201
+    assert response.data["message"] == "User created successfully."
     assert user.password != "12345678"
     assert user.check_password("12345678")
 
@@ -104,4 +110,5 @@ def test_register_user_invalid_data():
     )
 
     assert response.status_code == 400
+    assert response.data["message"] == "Validation failed."
     assert not User.objects.filter(username="").exists()
