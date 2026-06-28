@@ -23,7 +23,7 @@ from django.urls import include, path
 def home(request):
     return JsonResponse(
         {
-            "message": "Task Manager API",
+            "message": "API para gerenciamento de tarefas (To-Do)",
             "version": "1.0.0",
         }
     )
