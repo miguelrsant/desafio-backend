@@ -241,7 +241,7 @@ POST /tasks
 ### Atualizar tarefa
 
 ```http
-PUT /tasks/{id}
+PATCH /tasks/{id}
 ```
 
 Atualiza uma tarefa existente.

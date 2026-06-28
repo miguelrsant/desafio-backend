@@ -126,20 +126,32 @@ button:hover {
 /* modal */
 
 .modal {
+  width: 100vw;
+  height: 100vh;
+  background-color: #2222222c;
   display: none;
 
   position: fixed;
 
   inset: 0;
 
-  background: #0005;
-
   justify-content: center;
+  position: absolute;
 
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
   align-items: center;
 }
 
 .modal-content {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
   background: white;
 
   padding: 30px;

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/static/css/main.css" />
     <title>Cadastro</title>
+
     <style>
       body {
         height: 100vh;
@@ -28,5 +29,14 @@
     </div>
 
     <script src="/static/app.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const token = localStorage.getItem("token");
+
+        if (token) {
+          window.location.href = "/dashboard/";
+        }
+      });
+    </script>
   </body>
 </html>
