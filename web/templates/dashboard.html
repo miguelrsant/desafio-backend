@@ -1,0 +1,22 @@
+<!doctype html>
+
+<html>
+  <body>
+    <h1>Tarefas</h1>
+
+    <input id="title" placeholder="Nova tarefa" />
+    <input id="description" placeholder="Descrição da tarefa" />
+
+    <button onclick="createTask()">Criar</button>
+
+    <ul id="tasks"></ul>
+
+    <button onclick="logout()">Sair</button>
+
+    <script src="/static/app.js"></script>
+
+    <script>
+      loadTasks();
+    </script>
+  </body>
+</html>

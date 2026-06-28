@@ -118,8 +118,7 @@ def test_get_task_detail():
     assert responseLogin.status_code == 200
     acess_token = responseLogin.data["data"]["access"]
 
-    task = Task.objects.create(
-        title="Task 1", description="Description 1", user=user)
+    task = Task.objects.create(title="Task 1", description="Description 1", user=user)
 
     responseTaskDetail = client.get(
         f"/tasks/{task.id}/",
@@ -146,8 +145,7 @@ def test_get_other_user_task_detail():
     assert responseLogin.status_code == 200
     acess_token = responseLogin.data["data"]["access"]
 
-    task = Task.objects.create(
-        title="Task 1", description="Description 1", user=user2)
+    task = Task.objects.create(title="Task 1", description="Description 1", user=user2)
 
     responseTaskDetail = client.get(
         f"/tasks/{task.id}/",
@@ -171,8 +169,7 @@ def test_update_task():
     assert responseLogin.status_code == 200
     acess_token = responseLogin.data["data"]["access"]
 
-    task = Task.objects.create(
-        title="Task 1", description="Description 1", user=user)
+    task = Task.objects.create(title="Task 1", description="Description 1", user=user)
 
     responseUpdateTask = client.patch(
         f"/tasks/{task.id}/",
@@ -199,8 +196,7 @@ def test_update_other_user_task():
     assert responseLogin.status_code == 200
     acess_token = responseLogin.data["data"]["access"]
 
-    task = Task.objects.create(
-        title="Task 1", description="Description 1", user=user2)
+    task = Task.objects.create(title="Task 1", description="Description 1", user=user2)
 
     responseUpdateTask = client.patch(
         f"/tasks/{task.id}/",
@@ -225,8 +221,7 @@ def test_delete_task_soft_delete():
     assert responseLogin.status_code == 200
     acess_token = responseLogin.data["data"]["access"]
 
-    task = Task.objects.create(
-        title="Task 1", description="Description 1", user=user)
+    task = Task.objects.create(title="Task 1", description="Description 1", user=user)
 
     responseDeleteTask = client.delete(
         f"/tasks/{task.id}/",
@@ -254,8 +249,7 @@ def test_deleted_task_not_returned():
     assert responseLogin.status_code == 200
     acess_token = responseLogin.data["data"]["access"]
 
-    task = Task.objects.create(
-        title="Task 1", description="Description 1", user=user)
+    task = Task.objects.create(title="Task 1", description="Description 1", user=user)
 
     client.delete(
         f"/tasks/{task.id}/",
@@ -289,8 +283,7 @@ def test_delete_other_user_task():
     assert responseLogin.status_code == 200
     acess_token = responseLogin.data["data"]["access"]
 
-    task = Task.objects.create(
-        title="Task 1", description="Description 1", user=user2)
+    task = Task.objects.create(title="Task 1", description="Description 1", user=user2)
 
     responseDeleteTask = client.delete(
         f"/tasks/{task.id}/",
