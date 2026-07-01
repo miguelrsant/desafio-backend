@@ -9,7 +9,7 @@ def test_create_user():
     client = APIClient()
 
     response = client.post(
-        "/users/register",
+        "/api/users/register",
         {"username": "testuser", "password": "12345678"},
         format="json",
     )
@@ -27,7 +27,7 @@ def test_register_user_duplicate_username():
     User.objects.create_user(username="testuser", password="12345678")
 
     response = client.post(
-        "/users/register",
+        "/api/users/register",
         {"username": "testuser", "password": "12345678"},
         format="json",
     )
@@ -41,7 +41,7 @@ def test_register_user_without_username():
 
     client = APIClient()
 
-    response = client.post("/users/register", {"password": "12345678"}, format="json")
+    response = client.post("/api/users/register", {"password": "12345678"}, format="json")
 
     assert response.status_code == 400
     assert response.data["message"] == "Validation failed."
@@ -54,7 +54,7 @@ def test_register_user_without_password():
     client = APIClient()
 
     response = client.post(
-        "/users/register",
+        "/api/users/register",
         {
             "username": "testuser",
         },
@@ -72,7 +72,7 @@ def test_register_returns():
     client = APIClient()
 
     response = client.post(
-        "/users/register",
+        "/api/users/register",
         {"username": "testuser", "password": "12345678"},
         format="json",
     )
@@ -87,7 +87,7 @@ def test_register_password_is_hashed():
     client = APIClient()
 
     response = client.post(
-        "/users/register",
+        "/api/users/register",
         {"username": "testuser", "password": "12345678"},
         format="json",
     )
@@ -106,7 +106,7 @@ def test_register_user_invalid_data():
     client = APIClient()
 
     response = client.post(
-        "/users/register", {"username": "", "password": ""}, format="json"
+        "/api/users/register", {"username": "", "password": ""}, format="json"
     )
 
     assert response.status_code == 400

@@ -134,11 +134,11 @@ Além da API REST, o projeto possui uma interface desenvolvida utilizando **Djan
 
 As seguintes páginas estão disponíveis:
 
-| Página | Descrição |
-| ------- | --------- |
-| `/` | Página inicial (Home) |
-| `/login` | Login de usuários |
-| `/register` | Cadastro de usuários |
+| Página       | Descrição                 |
+| ------------ | ------------------------- |
+| `/`          | Página inicial (Home)     |
+| `/login`     | Login de usuários         |
+| `/register`  | Cadastro de usuários      |
 | `/dashboard` | Gerenciamento das tarefas |
 
 Através da interface é possível:
@@ -160,7 +160,7 @@ Através da interface é possível:
 ### Criar usuário
 
 ```http
-POST /users/register
+POST /api/users/register
 ```
 
 Cria um novo usuário.
@@ -179,7 +179,7 @@ Cria um novo usuário.
 ### Login
 
 ```http
-POST /users/login
+POST /api/users/login
 ```
 
 Autentica um usuário e retorna um token JWT.
@@ -202,20 +202,20 @@ Autentica um usuário e retorna um token JWT.
 ### Listar tarefas
 
 ```http
-GET /tasks
+GET /api/tasks
 ```
 
 Filtros disponíveis:
 
-| Parâmetro | Descrição |
-| --------- | --------- |
-| `title` | Filtra tarefas pelo título |
-| `status` | Filtra tarefas pelo status (`PENDING`, `IN_PROGRESS` ou `COMPLETED`) |
+| Parâmetro | Descrição                                                            |
+| --------- | -------------------------------------------------------------------- |
+| `title`   | Filtra tarefas pelo título                                           |
+| `status`  | Filtra tarefas pelo status (`PENDING`, `IN_PROGRESS` ou `COMPLETED`) |
 
 Exemplo:
 
 ```http
-GET /tasks?title=Estudar&status=PENDING
+GET /api/tasks?title=Estudar&status=PENDING
 ```
 
 ---
@@ -223,7 +223,7 @@ GET /tasks?title=Estudar&status=PENDING
 ### Criar tarefa
 
 ```http
-POST /tasks
+POST /api/tasks
 ```
 
 **Exemplo de requisição**
@@ -241,7 +241,7 @@ POST /tasks
 ### Atualizar tarefa
 
 ```http
-PATCH /tasks/{id}
+PATCH /api/tasks/{id}
 ```
 
 Atualiza uma tarefa existente.
@@ -261,7 +261,7 @@ Atualiza uma tarefa existente.
 ### Excluir tarefa
 
 ```http
-DELETE /tasks/{id}
+DELETE /api/tasks/{id}
 ```
 
 Realiza a exclusão lógica (Soft Delete). A tarefa deixa de ser retornada pela API, mas permanece armazenada no banco de dados para preservar o histórico.

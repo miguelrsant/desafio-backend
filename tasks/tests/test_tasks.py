@@ -11,14 +11,14 @@ def test_create_task_authenticated_user():
     User.objects.create_user(username="testuser", password="12345678")
 
     responseLogin = client.post(
-        "/users/login", {"username": "testuser", "password": "12345678"}, format="json"
+        "/api/users/login", {"username": "testuser", "password": "12345678"}, format="json"
     )
 
     assert responseLogin.status_code == 200
     acess_token = responseLogin.data["data"]["access"]
 
     responseTask = client.post(
-        "/tasks/",
+        "/api/tasks/",
         {"title": "Test Task", "description": "This is a test task."},
         format="json",
         HTTP_AUTHORIZATION=f"Bearer {acess_token}",
@@ -36,7 +36,7 @@ def test_create_task_without_authentication():
     client = APIClient()
 
     responseTask = client.post(
-        "/tasks/",
+        "/api/tasks/",
         {"title": "Test Task", "description": "This is a test task."},
         format="json",
     )
@@ -51,14 +51,14 @@ def test_create_task_invalid_data():
     User.objects.create_user(username="testuser", password="12345678")
 
     responseLogin = client.post(
-        "/users/login", {"username": "testuser", "password": "12345678"}, format="json"
+        "/api/users/login", {"username": "testuser", "password": "12345678"}, format="json"
     )
 
     assert responseLogin.status_code == 200
     acess_token = responseLogin.data["data"]["access"]
 
     responseTask = client.post(
-        "/tasks/",
+        "/api/tasks/",
         {"title": "", "description": "This is a test task."},
         format="json",
         HTTP_AUTHORIZATION=f"Bearer {acess_token}",
@@ -74,7 +74,7 @@ def test_get_user_tasks():
     user = User.objects.create_user(username="testuser", password="12345678")
 
     responseLogin = client.post(
-        "/users/login", {"username": "testuser", "password": "12345678"}, format="json"
+        "/api/users/login", {"username": "testuser", "password": "12345678"}, format="json"
     )
 
     assert responseLogin.status_code == 200
@@ -84,7 +84,7 @@ def test_get_user_tasks():
     Task.objects.create(title="Task 2", description="Description 2", user=user)
 
     responseTasks = client.get(
-        "/tasks/",
+        "/api/tasks/",
         format="json",
         HTTP_AUTHORIZATION=f"Bearer {acess_token}",
     )
@@ -98,7 +98,7 @@ def test_get_tasks_without_authentication():
     client = APIClient()
 
     responseTasks = client.get(
-        "/tasks/",
+        "/api/tasks/",
         format="json",
     )
 
@@ -112,7 +112,7 @@ def test_get_task_detail():
     user = User.objects.create_user(username="testuser", password="12345678")
 
     responseLogin = client.post(
-        "/users/login", {"username": "testuser", "password": "12345678"}, format="json"
+        "/api/users/login", {"username": "testuser", "password": "12345678"}, format="json"
     )
 
     assert responseLogin.status_code == 200
@@ -121,7 +121,7 @@ def test_get_task_detail():
     task = Task.objects.create(title="Task 1", description="Description 1", user=user)
 
     responseTaskDetail = client.get(
-        f"/tasks/{task.id}/",
+        f"/api/tasks/{task.id}/",
         format="json",
         HTTP_AUTHORIZATION=f"Bearer {acess_token}",
     )
@@ -139,7 +139,7 @@ def test_get_other_user_task_detail():
     user2 = User.objects.create_user(username="testuser2", password="12345678")
 
     responseLogin = client.post(
-        "/users/login", {"username": "testuser1", "password": "12345678"}, format="json"
+        "/api/users/login", {"username": "testuser1", "password": "12345678"}, format="json"
     )
 
     assert responseLogin.status_code == 200
@@ -148,7 +148,7 @@ def test_get_other_user_task_detail():
     task = Task.objects.create(title="Task 1", description="Description 1", user=user2)
 
     responseTaskDetail = client.get(
-        f"/tasks/{task.id}/",
+        f"/api/tasks/{task.id}/",
         format="json",
         HTTP_AUTHORIZATION=f"Bearer {acess_token}",
     )
@@ -163,7 +163,7 @@ def test_update_task():
     user = User.objects.create_user(username="testuser", password="12345678")
 
     responseLogin = client.post(
-        "/users/login", {"username": "testuser", "password": "12345678"}, format="json"
+        "/api/users/login", {"username": "testuser", "password": "12345678"}, format="json"
     )
 
     assert responseLogin.status_code == 200
@@ -172,7 +172,7 @@ def test_update_task():
     task = Task.objects.create(title="Task 1", description="Description 1", user=user)
 
     responseUpdateTask = client.patch(
-        f"/tasks/{task.id}/",
+        f"/api/tasks/{task.id}/",
         {"title": "Updated Task 1"},
         format="json",
         HTTP_AUTHORIZATION=f"Bearer {acess_token}",
@@ -190,7 +190,7 @@ def test_update_other_user_task():
     user2 = User.objects.create_user(username="testuser2", password="12345678")
 
     responseLogin = client.post(
-        "/users/login", {"username": "testuser1", "password": "12345678"}, format="json"
+        "/api/users/login", {"username": "testuser1", "password": "12345678"}, format="json"
     )
 
     assert responseLogin.status_code == 200
@@ -199,7 +199,7 @@ def test_update_other_user_task():
     task = Task.objects.create(title="Task 1", description="Description 1", user=user2)
 
     responseUpdateTask = client.patch(
-        f"/tasks/{task.id}/",
+        f"/api/tasks/{task.id}/",
         {"title": "Updated Task 1"},
         format="json",
         HTTP_AUTHORIZATION=f"Bearer {acess_token}",
@@ -215,7 +215,7 @@ def test_delete_task_soft_delete():
     user = User.objects.create_user(username="testuser", password="12345678")
 
     responseLogin = client.post(
-        "/users/login", {"username": "testuser", "password": "12345678"}, format="json"
+        "/api/users/login", {"username": "testuser", "password": "12345678"}, format="json"
     )
 
     assert responseLogin.status_code == 200
@@ -224,14 +224,13 @@ def test_delete_task_soft_delete():
     task = Task.objects.create(title="Task 1", description="Description 1", user=user)
 
     responseDeleteTask = client.delete(
-        f"/tasks/{task.id}/",
+        f"/api/tasks/{task.id}/",
         format="json",
         HTTP_AUTHORIZATION=f"Bearer {acess_token}",
     )
 
     assert responseDeleteTask.status_code == 200
 
-    # Check if the task is soft deleted
     task.refresh_from_db()
     assert task.deleted_at is not None
 
@@ -243,7 +242,7 @@ def test_deleted_task_not_returned():
     user = User.objects.create_user(username="testuser", password="12345678")
 
     responseLogin = client.post(
-        "/users/login", {"username": "testuser", "password": "12345678"}, format="json"
+        "/api/users/login", {"username": "testuser", "password": "12345678"}, format="json"
     )
 
     assert responseLogin.status_code == 200
@@ -252,7 +251,7 @@ def test_deleted_task_not_returned():
     task = Task.objects.create(title="Task 1", description="Description 1", user=user)
 
     client.delete(
-        f"/tasks/{task.id}/",
+        f"/api/tasks/{task.id}/",
         format="json",
         HTTP_AUTHORIZATION=f"Bearer {acess_token}",
     )
@@ -260,7 +259,7 @@ def test_deleted_task_not_returned():
     task.refresh_from_db()
 
     responseTasks = client.get(
-        "/tasks/",
+        "/api/tasks/",
         format="json",
         HTTP_AUTHORIZATION=f"Bearer {acess_token}",
     )
@@ -277,7 +276,7 @@ def test_delete_other_user_task():
     user2 = User.objects.create_user(username="testuser2", password="12345678")
 
     responseLogin = client.post(
-        "/users/login", {"username": "testuser1", "password": "12345678"}, format="json"
+        "/api/users/login", {"username": "testuser1", "password": "12345678"}, format="json"
     )
 
     assert responseLogin.status_code == 200
@@ -286,7 +285,7 @@ def test_delete_other_user_task():
     task = Task.objects.create(title="Task 1", description="Description 1", user=user2)
 
     responseDeleteTask = client.delete(
-        f"/tasks/{task.id}/",
+        f"/api/tasks/{task.id}/",
         format="json",
         HTTP_AUTHORIZATION=f"Bearer {acess_token}",
     )
@@ -301,7 +300,7 @@ def test_filter_tasks_by_title():
     user = User.objects.create_user(username="testuser", password="12345678")
 
     responseLogin = client.post(
-        "/users/login", {"username": "testuser", "password": "12345678"}, format="json"
+        "/api/users/login", {"username": "testuser", "password": "12345678"}, format="json"
     )
 
     assert responseLogin.status_code == 200
@@ -311,7 +310,7 @@ def test_filter_tasks_by_title():
     Task.objects.create(title="Task 2", description="Description 2", user=user)
 
     responseTasks = client.get(
-        "/tasks/?title=Task 1",
+        "/api/tasks/?title=Task 1",
         format="json",
         HTTP_AUTHORIZATION=f"Bearer {acess_token}",
     )
@@ -328,7 +327,7 @@ def test_filter_tasks_by_status():
     user = User.objects.create_user(username="testuser", password="12345678")
 
     responseLogin = client.post(
-        "/users/login", {"username": "testuser", "password": "12345678"}, format="json"
+        "/api/users/login", {"username": "testuser", "password": "12345678"}, format="json"
     )
 
     assert responseLogin.status_code == 200
@@ -342,7 +341,7 @@ def test_filter_tasks_by_status():
     )
 
     responseTasks = client.get(
-        "/tasks/?status=COMPLETED",
+        "/api/tasks/?status=COMPLETED",
         format="json",
         HTTP_AUTHORIZATION=f"Bearer {acess_token}",
     )
@@ -359,7 +358,7 @@ def test_filter_tasks_by_multiple_filters():
     user = User.objects.create_user(username="testuser", password="12345678")
 
     responseLogin = client.post(
-        "/users/login", {"username": "testuser", "password": "12345678"}, format="json"
+        "/api/users/login", {"username": "testuser", "password": "12345678"}, format="json"
     )
 
     assert responseLogin.status_code == 200
@@ -376,7 +375,7 @@ def test_filter_tasks_by_multiple_filters():
     )
 
     responseTasks = client.get(
-        "/tasks/?status=COMPLETED&title=Task 3",
+        "/api/tasks/?status=COMPLETED&title=Task 3",
         format="json",
         HTTP_AUTHORIZATION=f"Bearer {acess_token}",
     )

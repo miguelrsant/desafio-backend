@@ -11,7 +11,7 @@ def test_login_user():
     User.objects.create_user(username="testuser", password="12345678")
 
     response = client.post(
-        "/users/login", {"username": "testuser", "password": "12345678"}, format="json"
+        "/api/users/login", {"username": "testuser", "password": "12345678"}, format="json"
     )
 
     assert response.status_code == 200
@@ -25,7 +25,7 @@ def test_login_wrong_password():
     User.objects.create_user(username="testuser", password="12345678")
 
     response = client.post(
-        "/users/login",
+        "/api/users/login",
         {"username": "testuser", "password": "wrongpassword"},
         format="json",
     )
@@ -40,7 +40,7 @@ def test_login_user_not_found():
     client = APIClient()
 
     response = client.post(
-        "/users/login",
+        "/api/users/login",
         {"username": "nonexistentuser", "password": "12345678"},
         format="json",
     )
@@ -52,7 +52,7 @@ def test_login_user_not_found():
 def test_login_without_username():
     client = APIClient()
 
-    response = client.post("/users/login", {"password": "12345678"}, format="json")
+    response = client.post("/api/users/login", {"password": "12345678"}, format="json")
 
     assert response.status_code == 400
     assert response.data["message"] == "Validation failed."
@@ -61,7 +61,7 @@ def test_login_without_username():
 def test_login_without_password():
     client = APIClient()
 
-    response = client.post("/users/login", {"username": "testuser"}, format="json")
+    response = client.post("/api/users/login", {"username": "testuser"}, format="json")
 
     assert response.status_code == 400
     assert response.data["message"] == "Validation failed."
@@ -70,7 +70,7 @@ def test_login_without_password():
 def test_login_invalid_data():
     client = APIClient()
 
-    response = client.post("/users/login", {}, format="json")
+    response = client.post("/api/users/login", {}, format="json")
 
     assert response.status_code == 400
     assert response.data["message"] == "Validation failed."
@@ -83,7 +83,7 @@ def test_login_returns():
     User.objects.create_user(username="testuser", password="12345678")
 
     response = client.post(
-        "/users/login", {"username": "testuser", "password": "12345678"}, format="json"
+        "/api/users/login", {"username": "testuser", "password": "12345678"}, format="json"
     )
 
     assert response.status_code == 200
@@ -99,7 +99,7 @@ def test_login_last_login_updated():
     user = User.objects.create_user(username="testuser", password="12345678")
 
     client.post(
-        "/users/login", {"username": "testuser", "password": "12345678"}, format="json"
+        "/api/users/login", {"username": "testuser", "password": "12345678"}, format="json"
     )
 
     user.refresh_from_db()

@@ -11,7 +11,7 @@ async function register() {
 
   const password = document.getElementById("password").value;
 
-  const response = await fetch(API + "/users/register", {
+  const response = await fetch(API + "/api/users/register", {
     method: "POST",
 
     headers: {
@@ -38,7 +38,7 @@ async function login() {
 
   const password = document.getElementById("password").value;
 
-  const response = await fetch(API + "/users/login", {
+  const response = await fetch(API + "/api/users/login", {
     method: "POST",
 
     headers: {
@@ -60,7 +60,7 @@ async function login() {
   }
 }
 
-async function loadTasks(url = "/tasks/") {
+async function loadTasks(url = "/api/tasks/") {
   const response = await fetch(API + url, {
     headers: {
       Authorization: "Bearer " + getToken(),
@@ -102,30 +102,30 @@ async function loadTasks(url = "/tasks/") {
 }
 
 async function createTask() {
-  const title = document.getElementById("title").value;
+  const title = document.getElementById("title").value.trim();
+  const description = document.getElementById("description").value.trim();
 
-  const description = document.getElementById("description").value;
+  if (!title || !description) {
+    alert("Preencha o título e a descrição antes de criar a tarefa.");
+    return;
+  }
 
-  await fetch(API + "/tasks/", {
+  await fetch(API + "/api/tasks/", {
     method: "POST",
 
     headers: {
       "Content-Type": "application/json",
-
       Authorization: "Bearer " + getToken(),
     },
 
     body: JSON.stringify({
       title,
-
       description,
-
       status: "PENDING",
     }),
   });
 
   document.getElementById("title").value = "";
-
   document.getElementById("description").value = "";
 
   loadTasks();
@@ -134,7 +134,7 @@ async function createTask() {
 async function alterarTask(id) {
   taskEditando = id;
 
-  const response = await fetch(API + `/tasks/${id}/`, {
+  const response = await fetch(API + `/api/tasks/${id}/`, {
     headers: {
       Authorization: "Bearer " + getToken(),
     },
@@ -163,7 +163,7 @@ async function saveEdit() {
   const status = document.getElementById("editStatus").value;
 
   await fetch(
-    API + `/tasks/${taskEditando}/`,
+    API + `/api/tasks/${taskEditando}/`,
 
     {
       method: "PATCH",
@@ -195,7 +195,7 @@ function closeModal() {
 
 async function excluirTask(id) {
   await fetch(
-    API + `/tasks/${id}/`,
+    API + `/api/tasks/${id}/`,
 
     {
       method: "DELETE",
@@ -219,7 +219,7 @@ function filterTasks() {
 
   const status = document.getElementById("filterStatus").value;
 
-  let url = "/tasks/?";
+  let url = "/api/tasks/?";
 
   if (title) {
     url += `title=${title}&`;
